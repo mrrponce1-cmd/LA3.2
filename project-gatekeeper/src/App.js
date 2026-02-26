@@ -1,5 +1,3 @@
-isLoggedIn ? <Dashboard /> : <LoginForm />
-
 import React, { useState } from "react";
 import LoginForm from "./components/LoginForm";
 import Dashboard from "./components/Dashboard";
@@ -14,9 +12,14 @@ const App = () => {
     setUserEmail(email);
   };
 
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    setUserEmail("");
+  };
+
   return (
     <div className="page">
-      {isLoggedIn ? <Dashboard email={userEmail} /> : <LoginForm onLogin={handleLogin} />}
+      {isLoggedIn ? <Dashboard email={userEmail} onLogout={handleLogout} /> : <LoginForm onLogin={handleLogin} />}
     </div>
   );
 };

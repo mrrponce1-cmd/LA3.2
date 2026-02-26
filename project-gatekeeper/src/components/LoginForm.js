@@ -8,40 +8,55 @@ const LoginForm = ({ onLogin }) => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
 
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Mock authentication: password must equal "1234"
-    if (password === "1234") {
-      onLogin(email);
-    } else {
+    // Validate email format and password is not empty
+    if (!validateEmail(email)) {
       setError(true);
+      return;
     }
+    if (password.trim() === "") {
+      setError(true);
+      return;
+    }
+    onLogin(email);
   };
 
   return (
     <Card>
       <div className="left">
-        <div className="logo">T.I.P.</div>
-        <h1>Sign in</h1>
-        <p className="sub">to continue</p>
+        <div className="logo">Welcome</div>
+        <h1>Project Gatekeeper</h1>
       </div>
 
       <div className="right">
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} noValidate>
           <Input
-            type="email"
-            placeholder="Email or phone"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            error={error}
+          type="email"
+          placeholder="Email or phone"
+          value={email}
+          onChange={(e) => {
+            setEmail(e.target.value);
+            setError(false);
+          }}
+          error={error && !validateEmail(email)}   // only highlight email if invalid
           />
           <Input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            error={error}
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => {
+            setPassword(e.target.value);
+            setError(false);
+          }}
+          error={error && password.trim() === ""} // only highlight password if empty
           />
+
           <Button type="submit">Log in</Button>
           <div className="links">
             <a href="#">Forgot email?</a>
